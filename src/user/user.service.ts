@@ -1,18 +1,14 @@
-import {
-  Body,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Body, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { User } from './entities/user.entity';
-import { Messages, getNotFoundMessage } from 'src/constants';
+import { getNotFoundMessage } from 'src/constants';
 
 @Injectable()
 export class UserService {
   constructor(private databaseService: DatabaseService) {}
+
   async create(@Body() createUserDto: CreateUserDto) {
     const user = new User(createUserDto);
     await this.databaseService.add('user', user);
@@ -32,14 +28,8 @@ export class UserService {
   }
 
   async update(id: string, updatePasswordDto: UpdatePasswordDto) {
-    const { newPassword, oldPassword } = updatePasswordDto;
     const user = (await this.findOne(id)) as User;
-    if (user.password !== oldPassword) {
-      throw new ForbiddenException(Messages.OLD_PASSWORD_WRONG);
-    }
-    user.password = newPassword;
-    user.updatedAt = Date.now();
-    user.version += 1;
+    user.updatePassword(updatePasswordDto);
     return user;
   }
 
