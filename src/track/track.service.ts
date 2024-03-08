@@ -3,7 +3,7 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
 import { DatabaseService } from 'src/database/database.service';
-import { getNotFoundMessage } from 'src/constants';
+import { getNotFoundMessage } from 'src/utils';
 
 @Injectable()
 export class TrackService {

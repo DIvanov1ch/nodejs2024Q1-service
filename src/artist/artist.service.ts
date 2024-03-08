@@ -3,7 +3,7 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { Artist } from './entities/artist.entity';
-import { getNotFoundMessage } from 'src/constants';
+import { getNotFoundMessage } from 'src/utils';
 
 @Injectable()
 export class ArtistService {

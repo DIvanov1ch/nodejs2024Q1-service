@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { User } from './entities/user.entity';
-import { getNotFoundMessage } from 'src/constants';
+import { getNotFoundMessage } from 'src/utils';
 
 @Injectable()
 export class UserService {

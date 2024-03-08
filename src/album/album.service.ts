@@ -3,7 +3,7 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { DatabaseService } from 'src/database/database.service';
-import { getNotFoundMessage } from 'src/constants';
+import { getNotFoundMessage } from 'src/utils';
 
 @Injectable()
 export class AlbumService {
