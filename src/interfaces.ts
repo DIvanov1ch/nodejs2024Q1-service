@@ -1,3 +1,7 @@
+import { Album } from './album/entities/album.entity';
+import { Artist } from './artist/entities/artist.entity';
+import { Track } from './track/entities/track.entity';
+
 export interface IUser {
   id: string; // uuid v4
   login: string;
@@ -32,4 +36,10 @@ export interface IFavorites {
   artists: string[]; // favorite artists ids
   albums: string[]; // favorite albums ids
   tracks: string[]; // favorite tracks ids
+}
+
+export interface IFavoritesResponse {
+  artists: Artist[];
+  albums: Album[];
+  tracks: Track[];
 }
