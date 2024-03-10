@@ -17,7 +17,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const swaggerDocument = load(
-    readFileSync(join(PATH_TO_YAML_FOLDER, YAML_SWAGGER_FILENAME), 'utf8'),
+    readFileSync(
+      join(__dirname, PATH_TO_YAML_FOLDER, YAML_SWAGGER_FILENAME),
+      'utf8',
+    ),
   );
   app.use('/doc', serve, setup(swaggerDocument));
 
