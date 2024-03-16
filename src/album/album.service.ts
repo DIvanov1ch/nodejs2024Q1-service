@@ -2,9 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { DatabaseService } from 'src/database/database.service';
-import { getNotFoundMessage } from 'src/utils';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { Messages } from 'src/constants';
+import { Messages } from 'src/constants/constants';
 import { albumFields } from './entities/album.select';
 
 @Injectable()
@@ -32,7 +31,7 @@ export class AlbumService {
       select: albumFields,
     });
     if (!album) {
-      throw new NotFoundException(getNotFoundMessage('album', id));
+      throw new NotFoundException(Messages.ALBUM_DOES_NOT_EXIST);
     }
     return album;
   }

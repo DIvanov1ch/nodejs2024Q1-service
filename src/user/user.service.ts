@@ -7,8 +7,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DatabaseService } from 'src/database/database.service';
-import { getNotFoundMessage } from 'src/utils';
-import { Messages } from 'src/constants';
+import { Messages } from 'src/constants/constants';
 
 @Injectable()
 export class UserService {
@@ -29,7 +28,7 @@ export class UserService {
       where: { id },
     });
     if (!user) {
-      throw new NotFoundException(getNotFoundMessage('user', id));
+      throw new NotFoundException(Messages.USER_DOES_NOT_EXIST);
     }
     return user;
   }

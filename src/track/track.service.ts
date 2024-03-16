@@ -2,9 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { DatabaseService } from 'src/database/database.service';
-import { getNotFoundMessage } from 'src/utils';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { Messages } from 'src/constants';
+import { Messages } from 'src/constants/constants';
 import { trackFields } from './entities/track.select';
 
 @Injectable()
@@ -32,7 +31,7 @@ export class TrackService {
       select: trackFields,
     });
     if (!track) {
-      throw new NotFoundException(getNotFoundMessage('track', id));
+      throw new NotFoundException(Messages.TRACK_DOES_NOT_EXIST);
     }
     return track;
   }

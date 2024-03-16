@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DatabaseService } from 'src/database/database.service';
-import { getNotFoundMessage } from 'src/utils';
 import { artistFields } from './entities/artist.select';
+import { Messages } from 'src/constants/constants';
 
 @Injectable()
 export class ArtistService {
@@ -27,7 +27,7 @@ export class ArtistService {
       select: artistFields,
     });
     if (!artist) {
-      throw new NotFoundException(getNotFoundMessage('artist', id));
+      throw new NotFoundException(Messages.ARTIST_DOES_NOT_EXIST);
     }
     return artist;
   }
