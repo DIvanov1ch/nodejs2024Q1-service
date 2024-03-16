@@ -1,4 +1,4 @@
-import { IFavorites } from 'src/interfaces';
+import { IFavorites } from './favorites.model';
 
 export class Favorites implements IFavorites {
   albums: string[];
