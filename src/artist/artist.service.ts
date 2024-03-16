@@ -2,25 +2,29 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DatabaseService } from 'src/database/database.service';
-import { Artist } from './entities/artist.entity';
 import { getNotFoundMessage } from 'src/utils';
+import { artistFields } from './entities/artist.select';
 
 @Injectable()
 export class ArtistService {
   constructor(private databaseService: DatabaseService) {}
 
   async create(createArtistDto: CreateArtistDto) {
-    const artist = new Artist(createArtistDto);
-    await this.databaseService.add('artist', artist);
+    const artist = await this.databaseService.artist.create({
+      data: createArtistDto,
+      select: artistFields,
+    });
     return artist;
   }
 
   async findAll() {
-    return await this.databaseService.getAll('artist');
+    return await this.databaseService.artist.findMany();
   }
 
   async findOne(id: string) {
-    const artist = await this.databaseService.getOne('artist', id);
+    const artist = await this.databaseService.artist.findUnique({
+      where: { id },
+    });
     if (!artist) {
       throw new NotFoundException(getNotFoundMessage('artist', id));
     }
@@ -28,12 +32,15 @@ export class ArtistService {
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
-    const artist = (await this.findOne(id)) as Artist;
-    artist.update(updateArtistDto);
-    return artist;
+    await this.findOne(id);
+    return await this.databaseService.artist.update({
+      where: { id },
+      data: updateArtistDto,
+    });
   }
 
   async remove(id: string) {
-    return await this.databaseService.removeOne('artist', id);
+    await this.findOne(id);
+    return await this.databaseService.artist.delete({ where: { id } });
   }
 }
