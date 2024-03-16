@@ -8,14 +8,14 @@ import {
   HttpCode,
   ParseUUIDPipe,
   Put,
-  ClassSerializerInterceptor,
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { TransformUserInterceptor } from 'src/interceptors/transform-user.interceptor';
 
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(TransformUserInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
