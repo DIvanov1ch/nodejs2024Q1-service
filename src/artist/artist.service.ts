@@ -18,12 +18,13 @@ export class ArtistService {
   }
 
   async findAll() {
-    return await this.databaseService.artist.findMany();
+    return await this.databaseService.artist.findMany({ select: artistFields });
   }
 
   async findOne(id: string) {
     const artist = await this.databaseService.artist.findUnique({
       where: { id },
+      select: artistFields,
     });
     if (!artist) {
       throw new NotFoundException(getNotFoundMessage('artist', id));
@@ -36,6 +37,7 @@ export class ArtistService {
     return await this.databaseService.artist.update({
       where: { id },
       data: updateArtistDto,
+      select: artistFields,
     });
   }
 

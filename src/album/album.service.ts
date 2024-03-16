@@ -1,26 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { Album } from './entities/album.entity';
 import { DatabaseService } from 'src/database/database.service';
 import { getNotFoundMessage } from 'src/utils';
+import { BadRequestException } from '@nestjs/common/exceptions';
+import { Messages } from 'src/constants';
+import { albumFields } from './entities/album.select';
 
 @Injectable()
 export class AlbumService {
   constructor(private databaseService: DatabaseService) {}
 
   async create(createAlbumDto: CreateAlbumDto) {
-    const album = new Album(createAlbumDto);
-    await this.databaseService.add('album', album);
-    return album;
+    try {
+      return await this.databaseService.album.create({
+        data: createAlbumDto,
+        select: albumFields,
+      });
+    } catch (error) {
+      throw new BadRequestException(Messages.ARTIST_DOES_NOT_EXIST);
+    }
   }
 
   async findAll() {
-    return await this.databaseService.getAll('album');
+    return await this.databaseService.album.findMany({ select: albumFields });
   }
 
   async findOne(id: string) {
-    const album = await this.databaseService.getOne('album', id);
+    const album = await this.databaseService.album.findUnique({
+      where: { id },
+      select: albumFields,
+    });
     if (!album) {
       throw new NotFoundException(getNotFoundMessage('album', id));
     }
@@ -28,12 +38,20 @@ export class AlbumService {
   }
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const album = (await this.findOne(id)) as Album;
-    album.update(updateAlbumDto);
-    return album;
+    await this.findOne(id);
+    try {
+      return await this.databaseService.album.update({
+        where: { id },
+        data: updateAlbumDto,
+        select: albumFields,
+      });
+    } catch (error) {
+      throw new BadRequestException(Messages.ARTIST_DOES_NOT_EXIST);
+    }
   }
 
   async remove(id: string) {
-    return await this.databaseService.removeOne('album', id);
+    await this.findOne(id);
+    return await this.databaseService.album.delete({ where: { id } });
   }
 }
