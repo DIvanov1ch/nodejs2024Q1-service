@@ -1,26 +1,33 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Body,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DatabaseService } from 'src/database/database.service';
-import { User } from './entities/user.entity';
 import { getNotFoundMessage } from 'src/utils';
+import { Messages } from 'src/constants';
 
 @Injectable()
 export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = new User(createUserDto);
-    await this.databaseService.add('user', user);
-    return user;
+    return await this.databaseService.user.create({
+      data: createUserDto,
+    });
   }
 
   async findAll() {
-    return await this.databaseService.getAll('user');
+    return await this.databaseService.user.findMany();
   }
 
   async findOne(id: string) {
-    const user = await this.databaseService.getOne('user', id);
+    const user = await this.databaseService.user.findUnique({
+      where: { id },
+    });
     if (!user) {
       throw new NotFoundException(getNotFoundMessage('user', id));
     }
@@ -28,12 +35,21 @@ export class UserService {
   }
 
   async update(id: string, updatePasswordDto: UpdatePasswordDto) {
-    const user = (await this.findOne(id)) as User;
-    user.updatePassword(updatePasswordDto);
-    return user;
+    const user = await this.findOne(id);
+    const { oldPassword, newPassword } = updatePasswordDto;
+
+    if (user.password !== oldPassword) {
+      throw new ForbiddenException(Messages.OLD_PASSWORD_WRONG);
+    }
+
+    return await this.databaseService.user.update({
+      where: { id },
+      data: { password: newPassword, version: user.version + 1 },
+    });
   }
 
   async remove(id: string) {
-    return await this.databaseService.removeOne('user', id);
+    await this.findOne(id);
+    return await this.databaseService.user.delete({ where: { id } });
   }
 }
