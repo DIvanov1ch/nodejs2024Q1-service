@@ -33,7 +33,7 @@ npm install
 
 ## Running application
 
- - **Open `node-crud-api` folder, create a `.env` file in the root directory and define the port. Default port is `4000`**
+ - **Open `nodejs2024Q1-service` folder, create a `.env` file in the root directory and define the port. Default port is `4000`**
 
 ```plaintext
 PORT=5000
