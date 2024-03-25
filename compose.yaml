@@ -31,6 +31,7 @@ services:
       context: ./db
       dockerfile: Dockerfile
     container_name: postgresql
+    user: ${DB_USER}
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data
