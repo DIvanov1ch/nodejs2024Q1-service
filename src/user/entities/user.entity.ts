@@ -1,10 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { IUser } from 'src/interfaces';
-import { v4 as uuidv4 } from 'uuid';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdatePasswordDto } from '../dto/update-password.dto';
-import { ForbiddenException } from '@nestjs/common';
-import { Messages } from 'src/constants';
+import { IUser } from './user.model';
+import { User as PrismaUser } from '@prisma/client';
 
 export class User implements IUser {
   id: string;
@@ -17,31 +13,17 @@ export class User implements IUser {
   createdAt: number;
   updatedAt: number;
 
-  constructor(dto: CreateUserDto) {
-    const { login, password } = dto;
-    const date = User.getDate();
-
-    this.id = uuidv4();
+  constructor(user: PrismaUser) {
+    const { id, login, password, version, createdAt, updatedAt } = user;
+    this.id = id;
     this.login = login;
     this.password = password;
-    this.version = 1;
-    this.createdAt = date;
-    this.updatedAt = date;
+    this.version = version;
+    this.createdAt = User.convertDateToTimestamp(createdAt);
+    this.updatedAt = User.convertDateToTimestamp(updatedAt);
   }
 
-  static getDate() {
-    return Date.now();
-  }
-
-  updatePassword(dto: UpdatePasswordDto) {
-    const { oldPassword, newPassword } = dto;
-
-    if (this.password !== oldPassword) {
-      throw new ForbiddenException(Messages.OLD_PASSWORD_WRONG);
-    }
-
-    this.password = newPassword;
-    this.updatedAt = User.getDate();
-    this.version += 1;
+  static convertDateToTimestamp(date: Date) {
+    return new Date(date).getTime();
   }
 }

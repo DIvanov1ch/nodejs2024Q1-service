@@ -1,6 +1,6 @@
 import { Album } from 'src/album/entities/album.entity';
 import { Artist } from 'src/artist/entities/artist.entity';
-import { IFavoritesResponse } from 'src/interfaces';
+import { IFavoritesResponse } from './favorites.model';
 import { Track } from 'src/track/entities/track.entity';
 
 export class FavoritesResponse implements IFavoritesResponse {

@@ -1,0 +1,60 @@
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+services:
+
+  rest-api:
+    container_name: rest-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${PORT}:${PORT}
+    restart: always
+    volumes:
+      - ./src:/usr/src/app/src
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./src
+    #       target: /usr/src/app/src
+    networks:
+      - service-net
+    env_file:
+      - .env
+
+    depends_on:
+      database:
+        condition: service_healthy
+  database:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: postgresql
+    user: ${DB_USER}
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - db-logs:/var/log/postgresql
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+    networks:
+      - service-net
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+volumes:
+  db-data:
+  db-logs:
+
+networks:
+  service-net:
+    name: service-net
+    driver: bridge

@@ -1,39 +1,56 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { Track } from './entities/track.entity';
 import { DatabaseService } from 'src/database/database.service';
-import { getNotFoundMessage } from 'src/utils';
+import { BadRequestException } from '@nestjs/common/exceptions';
+import { Messages } from 'src/constants/constants';
+import { trackFields } from './entities/track.select';
 
 @Injectable()
 export class TrackService {
   constructor(private databaseService: DatabaseService) {}
 
   async create(createTrackDto: CreateTrackDto) {
-    const track = new Track(createTrackDto);
-    await this.databaseService.add('track', track);
-    return track;
+    try {
+      return await this.databaseService.track.create({
+        data: createTrackDto,
+        select: trackFields,
+      });
+    } catch (error) {
+      throw new BadRequestException(Messages.ARTIST_OR_ALBUM_DOES_NOT_EXIST);
+    }
   }
 
   async findAll() {
-    return await this.databaseService.getAll('track');
+    return await this.databaseService.track.findMany({ select: trackFields });
   }
 
   async findOne(id: string) {
-    const track = await this.databaseService.getOne('track', id);
+    const track = await this.databaseService.track.findUnique({
+      where: { id },
+      select: trackFields,
+    });
     if (!track) {
-      throw new NotFoundException(getNotFoundMessage('track', id));
+      throw new NotFoundException(Messages.TRACK_DOES_NOT_EXIST);
     }
     return track;
   }
 
   async update(id: string, updateTrackDto: UpdateTrackDto) {
-    const track = (await this.findOne(id)) as Track;
-    track.update(updateTrackDto);
-    return track;
+    await this.findOne(id);
+    try {
+      return await this.databaseService.track.update({
+        where: { id },
+        data: updateTrackDto,
+        select: trackFields,
+      });
+    } catch (error) {
+      throw new BadRequestException(Messages.ARTIST_OR_ALBUM_DOES_NOT_EXIST);
+    }
   }
 
   async remove(id: string) {
-    return await this.databaseService.removeOne('track', id);
+    await this.findOne(id);
+    return await this.databaseService.track.delete({ where: { id } });
   }
 }

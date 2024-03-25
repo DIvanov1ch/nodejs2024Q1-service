@@ -8,24 +8,24 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/DIvanov1ch/nodejs2024Q1-service.git
 ```
 
 ## Installing NPM modules
 
-- **Navigate to the project directory:**
+- Navigate to the project directory:
 
 ```bash
 cd nodejs2024Q1-service/
 ```
 
-- **Switch to `develop` branch:**
+- Switch to `develop` branch:
 
 ```bash
 git checkout develop
 ```
 
-- **Install dependencies:**
+- Install dependencies:
 
 ```bash
 npm install
@@ -33,20 +33,35 @@ npm install
 
 ## Running application
 
- - **Open `nodejs2024Q1-service` folder, create a `.env` file in the root directory and define the port. Default port is `4000`**
-
-```plaintext
-PORT=5000
+ - Create and start containers
 ```
- - **Run application**
-
-```
-npm start
+npm run docker:up
 ```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+ - Start existing containers for a service
+```
+npm run docker:start
+```
+
+ - Stop running containers without removing them. They can be started again with `npm run docker:start`.
+```
+npm run docker:stop
+```
+
+ - Stop containers and remove containers, networks, volumes, and images created by `up`.
+```
+npm run docker:down
+```
+
+ - Quick overview of an image.
+```
+npm run docker:view:quick
+```
+
+ - Complete view of all the vulnerabilities in the image.
+```
+npm run docker:view:complete
+```
 
 ## Testing
 

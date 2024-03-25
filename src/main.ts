@@ -7,7 +7,7 @@ import {
   DEFAULT_PORT,
   PATH_TO_YAML_FOLDER,
   YAML_SWAGGER_FILENAME,
-} from './constants';
+} from './constants/constants';
 import { load } from 'js-yaml';
 import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
