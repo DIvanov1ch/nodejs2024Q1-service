@@ -8,8 +8,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      PORT: ${PORT}
     ports:
       - ${PORT}:${PORT}
     restart: always
@@ -21,7 +19,7 @@ services:
     #       path: ./src
     #       target: /usr/src/app/src
     networks:
-      - service
+      - service-net
     env_file:
       - .env
 
@@ -32,20 +30,16 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
-    container_name: postgres
+    container_name: postgresql
     restart: always
-    user: ${DB_USER}
     volumes:
       - db-data:/var/lib/postgresql/data
       - db-logs:/var/log/postgresql
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USER}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
     networks:
-      - service
+      - service-net
     ports:
       - ${DB_PORT}:${DB_PORT}
     healthcheck:
@@ -60,6 +54,6 @@ volumes:
   db-logs:
 
 networks:
-  service:
-    name: service
+  service-net:
+    name: service-net
     driver: bridge

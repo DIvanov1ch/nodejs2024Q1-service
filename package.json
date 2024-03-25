@@ -14,7 +14,6 @@
     "docker:up": "docker compose up",
     "docker:view:quick": "docker scout qv local://nodejs2024q1-service-database && docker scout qv local://nodejs2024q1-service-rest-api",
     "docker:view:complete": "docker scout cves local://nodejs2024q1-service-database && docker scout cves local://nodejs2024q1-service-rest-api",
-    "docker:watch": "docker compose watch",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

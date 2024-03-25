@@ -1,5 +1,7 @@
 FROM postgres:16-alpine
 
+ENV LANG en_US.utf8
+
 RUN ["mkdir", "/var/log/postgresql"]
 RUN ["chown", "postgres:postgres", "/var/log/postgresql"]
 

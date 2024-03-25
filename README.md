@@ -43,7 +43,7 @@ npm run docker:up
 npm run docker:start
 ```
 
- - Stop running containers without removing them. They can be started again with `docker compose start`.
+ - Stop running containers without removing them. They can be started again with `npm run docker:start`.
 ```
 npm run docker:stop
 ```
