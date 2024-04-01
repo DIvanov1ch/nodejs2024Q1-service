@@ -14,6 +14,7 @@ services:
     volumes:
       - ./src:/usr/src/app/src
       - .:/usr/src/app
+      - ./log:/usr/src/app/log
     # develop:
     #   watch:
     #     - action: sync
