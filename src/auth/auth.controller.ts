@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 import { TransformUserInterceptor } from 'src/interceptors/transform-user.interceptor';
-import { Public } from 'src/public/public.decorator';
+import { Public } from 'src/decorators/public.decorator';
 import { AuthService } from './auth.service';
 import { LogInDto } from './dto/log-in.dto';
 import { RefreshDto } from './dto/refresh.dto';

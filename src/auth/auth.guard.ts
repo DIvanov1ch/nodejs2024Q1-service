@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { REFRESH_ROUTE } from 'src/constants/constants';
-import { IS_PUBLIC_KEY } from 'src/public/public.decorator';
+import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
 import { RefreshDto } from './dto/refresh.dto';
 
 @Injectable()
