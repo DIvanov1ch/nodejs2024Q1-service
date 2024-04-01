@@ -1,6 +1,6 @@
 import { Body, Injectable, ForbiddenException } from '@nestjs/common';
 import { Messages } from 'src/constants/constants';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/core/user/user.service';
 import { LogInDto } from './dto/log-in.dto';
 import { RefreshDto } from './dto/refresh.dto';
 import { SignUpDto } from './dto/sign-up.dto';
