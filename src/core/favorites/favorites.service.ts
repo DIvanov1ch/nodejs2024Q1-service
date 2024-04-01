@@ -3,11 +3,11 @@ import {
   UnprocessableEntityException,
   NotFoundException,
 } from '@nestjs/common';
-import { albumFields } from 'src/album/entities/album.select';
-import { artistFields } from 'src/artist/entities/artist.select';
+import { albumFields } from 'src/core/album/entities/album.select';
+import { artistFields } from 'src/core/artist/entities/artist.select';
 import { FAVORITES_ID, Messages } from 'src/constants/constants';
 import { DatabaseService } from 'src/database/database.service';
-import { trackFields } from 'src/track/entities/track.select';
+import { trackFields } from 'src/core/track/entities/track.select';
 import { EntityType } from 'src/types/types';
 
 @Injectable()
