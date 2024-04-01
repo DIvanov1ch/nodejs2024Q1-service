@@ -8,7 +8,7 @@ import { artistFields } from 'src/artist/entities/artist.select';
 import { FAVORITES_ID, Messages } from 'src/constants/constants';
 import { DatabaseService } from 'src/database/database.service';
 import { trackFields } from 'src/track/entities/track.select';
-import { EntityType } from 'src/types';
+import { EntityType } from 'src/types/types';
 
 @Injectable()
 export class FavoritesService {
