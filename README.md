@@ -19,10 +19,10 @@ git clone https://github.com/DIvanov1ch/nodejs2024Q1-service.git
 cd nodejs2024Q1-service/
 ```
 
-- Switch to `develop` branch:
+- Switch to `log-auth` branch:
 
 ```bash
-git checkout develop
+git checkout log-auth
 ```
 
 - Install dependencies:
@@ -67,16 +67,22 @@ npm run docker:view:complete
 
 After application running open new terminal and enter:
 
-To run all tests without authorization
+To run all tests with authorization
 
 ```
-npm run test
+npm run test:auth
 ```
 
-To run only one of all test suites
+To run only specific test suite with authorization
 
 ```
-npm run test -- <path to suite>
+npm run test:auth -- <path to suite>
+```
+
+To test route `/auth/refresh`
+
+```
+npm run test:refresh
 ```
 
 ### Endpoints
