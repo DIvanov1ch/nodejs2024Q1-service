@@ -8,15 +8,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { Messages } from 'src/constants/constants';
+import { hashPassword, isEqualPassword } from 'src/utils/hash-password.utils';
 
 @Injectable()
 export class UserService {
   constructor(private databaseService: DatabaseService) {}
 
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.databaseService.user.create({
-      data: createUserDto,
-    });
+    const hash = await hashPassword(createUserDto.password);
+    const data: CreateUserDto = { ...createUserDto, password: hash };
+    return await this.databaseService.user.create({ data });
   }
 
   async findAll() {
@@ -37,18 +38,31 @@ export class UserService {
     const user = await this.findOne(id);
     const { oldPassword, newPassword } = updatePasswordDto;
 
-    if (user.password !== oldPassword) {
+    const isEqual = await isEqualPassword(oldPassword, user.password);
+    if (!isEqual) {
       throw new ForbiddenException(Messages.OLD_PASSWORD_WRONG);
     }
 
+    const hash = await hashPassword(newPassword);
+
     return await this.databaseService.user.update({
       where: { id },
-      data: { password: newPassword, version: user.version + 1 },
+      data: { password: hash, version: user.version + 1 },
     });
   }
 
   async remove(id: string) {
     await this.findOne(id);
     return await this.databaseService.user.delete({ where: { id } });
+  }
+
+  async findFirst(login: string) {
+    const user = await this.databaseService.user.findFirst({
+      where: { login },
+    });
+    if (!user) {
+      throw new ForbiddenException(Messages.INCORRECT_LOGIN);
+    }
+    return user;
   }
 }

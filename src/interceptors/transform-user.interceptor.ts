@@ -8,7 +8,7 @@ import { instanceToPlain } from 'class-transformer';
 import { User as PrismaUser } from '@prisma/client';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/core/user/entities/user.entity';
 
 @Injectable()
 export class TransformUserInterceptor implements NestInterceptor {
